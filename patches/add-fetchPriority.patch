@@ -1,0 +1,32 @@
+#@ https://github.com/xerc
+#! https://forge.typo3.org/issues/97765
+--- cms-fluid/Classes/ViewHelpers/ImageViewHelper.bak	2022-07-10 14:29:44.456405848 +0200
++++ cms-fluid/Classes/ViewHelpers/ImageViewHelper.php	2022-07-10 14:30:12.566407312 +0200
+@@ -116,6 +116,7 @@
+         $this->registerTagAttribute('usemap', 'string', 'Specifies an image as a client-side image-map', false);
+         $this->registerTagAttribute('loading', 'string', 'Native lazy-loading for images property. Can be "lazy", "eager" or "auto"', false);
+         $this->registerTagAttribute('decoding', 'string', 'Provides an image decoding hint to the browser. Can be "sync", "async" or "auto"', false);
++        $this->registerTagAttribute('fetchPriority', 'string', 'Provides an image fetchPriority hint to the browser. Can be "high", "low" or "auto"', false);
+
+         $this->registerArgument('src', 'string', 'a path to a file, a combined FAL identifier or an uid (int). If $treatIdAsReference is set, the integer is considered the uid of the sys_file_reference record. If you already got a FAL object, consider using the $image parameter instead', false, '');
+         $this->registerArgument('treatIdAsReference', 'bool', 'given src argument is a sys_file_reference record', false, false);
+--- cms-fluid/Classes/ViewHelpers/MediaViewHelper.bak	2022-07-10 14:29:50.878406183 +0200
++++ cms-fluid/Classes/ViewHelpers/MediaViewHelper.php	2022-07-10 14:31:10.891410350 +0200
+@@ -89,6 +89,7 @@
+         $this->registerArgument('fileExtension', 'string', 'Custom file extension to use for images');
+         $this->registerArgument('loading', 'string', 'Native lazy-loading for images property. Can be "lazy", "eager" or "auto". Used on image files only.');
+         $this->registerArgument('decoding', 'string', 'Provides an image decoding hint to the browser. Can be "sync", "async" or "auto"', false);
++        $this->registerArgument('fetchPriority', 'string', 'Provides an image fetchPriority hint to the browser. Can be "high", "low" or "auto"', false);
+     }
+
+     /**
+@@ -171,6 +171,9 @@
+         if (in_array($this->arguments['decoding'] ?? '', ['sync', 'async', 'auto'], true)) {
+             $this->tag->addAttribute('decoding', $this->arguments['decoding']);
+         }
++        if (in_array($this->arguments['fetchPriority'] ?? '', ['high', 'low', 'auto'], true)) {
++            $this->tag->addAttribute('fetchpriority', $this->arguments['fetchPriority']);
++        }
+
+         $alt = $image->getProperty('alternative');
+         $title = $image->getProperty('title');
